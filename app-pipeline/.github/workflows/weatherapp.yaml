@@ -1,0 +1,83 @@
+name: 'WeatherApp Deployment Pipeline'
+
+on: workflow_dispatch
+
+
+env:
+  AWS_REGION: us-west-2
+  ECR_REPOSITORY: weather_app
+  EKS_CLUSTER: weatherapp-eks
+
+jobs:
+  Testing:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Code checkout
+        uses: actions/checkout@v2
+
+      # Setup sonar-scanner
+      - name: Setup SonarQube
+        uses: warchant/setup-sonar-scanner@v7
+
+      # Run sonar-scanner
+      - name: SonarQube Scan
+        run: |
+           npm install -g sonar-scanner
+           sonar-scanner \
+            -Dsonar.host.url=${{ secrets.SONAR_URL }} \
+            -Dsonar.login=${{ secrets.SONAR_TOKEN }} \
+            -Dsonar.organization=${{ secrets.SONAR_ORGANIZATION }} \
+            -Dsonar.projectKey=${{ secrets.SONAR_PROJECT_KEY }} \
+            -Dsonar.sources=. \
+
+      # Check the Quality Gate status.
+      - name: SonarQube Quality Gate check
+        id: sonarqube-quality-gate-check
+        uses: sonarsource/sonarqube-quality-gate-action@master
+        timeout-minutes: 5
+        env:
+          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
+          SONAR_HOST_URL: ${{ secrets.SONAR_URL }}
+
+
+  Build_and_Publish:
+
+    needs: Testing
+    runs-on: ubuntu-latest
+
+
+    steps:
+    - name: Code checkout
+      uses: actions/checkout@v4
+
+    - name: Build & Upload image to ECR
+      uses: appleboy/docker-ecr-action@master
+      with:
+        access_key: ${{ secrets.AWS_ACCESS_KEY_ID }}
+        secret_key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+        registry: ${{ secrets.REGISTRY }}
+        repo: ${{ env.ECR_REPOSITORY }}
+        region: ${{ env.AWS_REGION }}
+        tags: latest,${{ github.run_number }}
+        daemon_off: false
+        dockerfile: weather_app/Dockerfile
+        context: ./
+
+
+
+
+  Deploy-To-EKS:
+        needs: BUILD_AND_PUBLISH
+        runs-on: ubuntu-latest
+        steps:
+
+          - name: Code checkout
+            uses: actions/checkout@v4
+    
+          - name: Configure AWS credentials
+            uses: aws-actions/configure-aws-credentials@v1
+            with:
+                aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+                aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+                aws-region: ${{ env.AWS_REGION }}

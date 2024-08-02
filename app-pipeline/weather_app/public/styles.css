@@ -1,0 +1,30 @@
+body {
+    background: linear-gradient(to right, #d5b5f6, #88b1f6);
+    color: #fff;
+    font-family: 'Arial', sans-serif;
+}
+
+.card {
+    background: rgba(255, 215, 0, 0.8);
+    border: none;
+    border-radius: 10px;
+}
+
+.card-title {
+    font-size: 2rem;
+    font-weight: bold;
+    margin-bottom: 20px;
+}
+
+.btn-primary {
+    background-color: #2575fc;
+    border: none;
+}
+
+.btn-primary:hover {
+    background-color: #6a11cb;
+}
+
+.alert {
+    font-size: 1.2rem;
+}

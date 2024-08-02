@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>World Weather</title>
+    <link rel="icon" href="/assets/ok_weather.png" type="image/png">
+    <link href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" rel="stylesheet">
+    <link href="styles.css" rel="stylesheet">
+</head>
+<body>
+    <div class="container">
+        <div class="row justify-content-center">
+            <div class="col-md-6">
+                <div class="card mt-5 shadow">
+                    <div class="card-body">
+                        <h1 class="card-title text-center">Weather Update</h1>
+                        <form id="weather-form">
+                            <div class="form-group">
+                                <input type="text" class="form-control" id="city-input" placeholder="Enter City">
+                            </div>
+                            <button type="submit" class="btn btn-primary btn-block">Get Weather</button>
+                        </form>
+                        <br>
+                        <div id="weather-result" class="alert d-none"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        document.getElementById('weather-form').addEventListener('submit', async function(event) {
+            event.preventDefault();
+            const city = document.getElementById('city-input').value;
+            if (!city) {
+                displayMessage('Please enter a city', 'danger');
+                return;
+            }
+            try {
+                const response = await fetch(`/weather?city=${city}`);
+                const data = await response.json();
+                if (data.error) {
+                    displayMessage(data.error, 'danger');
+                } else {
+                    displayMessage(data.weather, 'success');
+                }
+            } catch (error) {
+                displayMessage('Error, please try again', 'danger');
+            }
+        });
+
+        function displayMessage(message, type) {
+            const resultDiv = document.getElementById('weather-result');
+            resultDiv.className = `alert alert-${type}`;
+            resultDiv.textContent = message;
+            resultDiv.classList.remove('d-none');
+        }
+    </script>
+</body>
+
+
+</html>
