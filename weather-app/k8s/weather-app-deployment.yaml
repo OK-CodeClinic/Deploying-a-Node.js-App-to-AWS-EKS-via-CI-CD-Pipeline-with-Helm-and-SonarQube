@@ -19,3 +19,17 @@ spec:
         image: {{.Values.appimage}}:{{.Values.apptag}}
         ports:
         - containerPort: 3000
+        resources:
+          requests:
+            memory: "256Mi"
+            cpu: "500m"
+          limits:
+            memory: "512Mi"
+            cpu: "1000m"
+        volumeMounts:
+        - name: weather-app-storage
+          mountPath: /usr/src/app/storage
+      volumes:
+      - name: weather-app-storage
+        persistentVolumeClaim:
+          claimName: weather-app-pvc
