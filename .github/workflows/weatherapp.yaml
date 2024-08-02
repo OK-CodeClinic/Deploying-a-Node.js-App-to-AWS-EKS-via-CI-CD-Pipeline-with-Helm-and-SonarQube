@@ -89,13 +89,25 @@ jobs:
           - name: Print config file
             run: cat ~/.kube/config
     
-    
-         # - name: Delete existing Docker registry secret if it exists
-          #  run: kubectl delete secret regcred --ignore-not-found
-    
+
+          # Check if Docker registry secret exists
+          - name: Check for existing Docker registry secret
+            id: check-secret
+            run: |
+              if kubectl get secret regcred; then
+                echo "Secret exists."
+                echo "exists=true" >> $GITHUB_ENV
+              else
+                echo "Secret does not exist."
+                echo "exists=false" >> $GITHUB_ENV
+              fi
+
+          # Create Docker registry secret if it does not exist
           - name: Login to ECR
-            run: kubectl create secret docker-registry regcred --docker-server=${{ secrets.REGISTRY }} --docker-username=AWS  --docker-password=$(aws ecr get-login-password) 
-    
+            if: env.exists == 'false'
+            run: kubectl create secret docker-registry regcred --docker-server=${{ secrets.REGISTRY }} --docker-username=AWS  --docker-password=$(aws ecr get-login-password)
+
+
           - name: Deploy Helm
             uses: bitovi/github-actions-deploy-eks-helm@v1.2.8
             with:
@@ -107,4 +119,4 @@ jobs:
                 chart-path: helm/weather_app_charts
                 namespace: default
                 values: appimage=${{ secrets.REGISTRY }}/${{ env.ECR_REPOSITORY }},apptag=${{ github.run_number }}
-                name: weather_app_stack 
+                name: weather-app-stack 
