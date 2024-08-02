@@ -1,4 +1,4 @@
-name: 'WeatherApp Deployment Pipeline'
+name: 'NewsApp-Deployment Pipeline'
 
 on: workflow_dispatch
 
@@ -61,7 +61,7 @@ jobs:
         region: ${{ env.AWS_REGION }}
         tags: latest,${{ github.run_number }}
         daemon_off: false
-        dockerfile: weather-app/weather_app/Dockerfile
+        dockerfile: weather-app/news-website/Dockerfile
         context: ./
 
 
