@@ -1,24 +1,20 @@
-FROM node:16.15.0
+# Use a base image with Node.js
+FROM node:14
 
+# Set the working directory in the container
 WORKDIR /usr/src/app
 
-
-RUN npm init
-
-RUN npm install express
-
-RUN npm install -g 
-
-# Copy package.json and package-lock.json
+# Copy package.json and package-lock.json to the working directory
 COPY package*.json ./
 
 # Install dependencies
 RUN npm install
-# Copy the rest of the application files
+
+# Copy the rest of the application files to the working directory
 COPY . .
 
-# Ensure the port is exposed
+# Expose the port the app runs on
 EXPOSE 3000
 
-
+# Command to run the app
 CMD ["npm", "start"]
