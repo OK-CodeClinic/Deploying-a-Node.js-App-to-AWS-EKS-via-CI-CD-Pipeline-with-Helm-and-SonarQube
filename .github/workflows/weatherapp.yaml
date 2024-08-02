@@ -81,3 +81,30 @@ jobs:
                 aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
                 aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
                 aws-region: ${{ env.AWS_REGION }}
+
+
+          - name: Get Kube config file
+            run: aws eks update-kubeconfig --region ${{ env.AWS_REGION }} --name ${{ env.EKS_CLUSTER }}
+    
+          - name: Print config file
+            run: cat ~/.kube/config
+    
+    
+         # - name: Delete existing Docker registry secret if it exists
+          #  run: kubectl delete secret regcred --ignore-not-found
+    
+          - name: Login to ECR
+            run: kubectl create secret docker-registry regcred --docker-server=${{ secrets.REGISTRY }} --docker-username=AWS  --docker-password=$(aws ecr get-login-password) 
+    
+          - name: Deploy Helm
+            uses: bitovi/github-actions-deploy-eks-helm@v1.2.8
+            with:
+                aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+                aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+                aws-region: ${{ env.AWS_REGION }}
+                cluster-name: ${{ env.EKS_CLUSTER }}
+                #config-files: .github/values/dev.yaml
+                chart-path: helm/weather_app_charts
+                namespace: default
+                values: appimage=${{ secrets.REGISTRY }}/${{ env.ECR_REPOSITORY }},apptag=${{ github.run_number }}
+                name: weather_app_stack 
