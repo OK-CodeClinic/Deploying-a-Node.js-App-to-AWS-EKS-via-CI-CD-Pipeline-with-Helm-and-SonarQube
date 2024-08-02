@@ -61,7 +61,7 @@ jobs:
         region: ${{ env.AWS_REGION }}
         tags: latest,${{ github.run_number }}
         daemon_off: false
-        dockerfile: weather_app/Dockerfile
+        dockerfile: weather-app/weather_app/Dockerfile
         context: ./
 
 
