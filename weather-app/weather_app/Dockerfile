@@ -2,17 +2,17 @@ FROM node:16.15.0
 
 WORKDIR /usr/src/app
 
-# Copy only package.json and package-lock.json first
+# Copy package.json and package-lock.json
 COPY package.json package-lock.json ./
 
 # Install dependencies
 RUN npm install
 
-# Copy the rest of your application files, excluding node_modules and other unnecessary files
+# Copy the rest of the application files
 COPY . .
 
-# Ensure that the app.js is in the right directory
-# If your app.js is now in the 'src' directory, ensure this is reflected in CMD
+# Ensure the port is exposed
 EXPOSE 3000
 
+# Start the application
 CMD ["npm", "start"]
