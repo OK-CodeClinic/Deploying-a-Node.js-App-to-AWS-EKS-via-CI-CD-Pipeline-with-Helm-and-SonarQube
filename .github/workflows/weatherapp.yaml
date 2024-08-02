@@ -116,7 +116,7 @@ jobs:
                 aws-region: ${{ env.AWS_REGION }}
                 cluster-name: ${{ env.EKS_CLUSTER }}
                 #config-files: .github/values/dev.yaml
-                chart-path: helm/weather_app_charts
+                chart-path: helm/weather-app/weather_app_charts
                 namespace: default
                 values: appimage=${{ secrets.REGISTRY }}/${{ env.ECR_REPOSITORY }},apptag=${{ github.run_number }}
                 name: weather-app-stack 
