@@ -19,3 +19,10 @@ spec:
         image: {{.Values.appimage}}:{{.Values.apptag}}
         ports:
         - containerPort: 3000
+        volumeMounts:
+        - name: weather-app-storage
+          mountPath: /usr/src/app
+      volumes:
+      - name: weather-app-storage
+        persistentVolumeClaim:
+          claimName: weather-app-pvc
