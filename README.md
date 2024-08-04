@@ -65,27 +65,64 @@ Update all secrets to the github repo
 - SONAR_TOKEN
 - SONAR_PROJECT_KEY
 
+![Screenshot (396)](https://github.com/user-attachments/assets/db955752-45b4-4cd6-927a-e1fbd25914c6)
+
+
 ### Step 5:
 Make modification to terraform code and push to github
 
 This will trigger the workflow of the  terrafrm infrastruture.
+
+- First Pipleine
+
+![Screenshot (379)](https://github.com/user-attachments/assets/6bd50f85-f62f-4d71-abaa-0e6e0d12b785)
+
+![Screenshot (380)](https://github.com/user-attachments/assets/ccab0741-5a57-4069-86b4-6af3de9b03d6)
 
 
 
 ### Step 6:
 After terraform has created all infrasture including the EKS cluster, run the deployment workflow.
 
+- Deployment Pipeline
+- ![Screenshot (382)](https://github.com/user-attachments/assets/7596a098-c0f7-4dbd-9e84-b2157e9183a5)
+
+- Testing Using SonarQube quality gate
+- 
+![Screenshot (383)](https://github.com/user-attachments/assets/489bbc80-a469-4446-8593-1df9d486c913)
+
+- Build Docker image from docker file and uopload to EKS
+
+![Screenshot (384)](https://github.com/user-attachments/assets/2128e111-7ea8-45d5-8113-39c6838cc969)
+
+- Deploy manifest files to EKS using Helm Charts
+
+![Screenshot (385)](https://github.com/user-attachments/assets/98d2b9de-9b1b-4434-b24e-817014b90c44)
+
+
+
+
+
+
 ### Step 7:
 Verify the cluster, the nodes, the pods, the deployment and services.
 
+![Screenshot (387)](https://github.com/user-attachments/assets/9cd41cfc-0fa6-412a-8c40-16290397870b)
+
+
 ### Ste 8:
 Use ALB DNS name created by ingress to create a CNAME in the Route 53 Hosted Zone
+
+![Screenshot (394)](https://github.com/user-attachments/assets/32ac94d1-617d-4c26-8281-49659f1f59d4)
+
 
 ### Step 9:
 Access your webapp usingh the cname record.
 ```
 news-app.okproject.site
 ```
+![Screenshot (388)](https://github.com/user-attachments/assets/652aa900-2b02-4ece-a382-9d103a858c73)
+
 
 ### Step 10: Destroy
 - Delete the ingress controller
