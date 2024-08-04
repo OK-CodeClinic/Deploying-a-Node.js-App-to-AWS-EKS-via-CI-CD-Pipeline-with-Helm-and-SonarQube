@@ -14,7 +14,7 @@ spec:
     spec:
       containers:
       - name: news-app-container
-        image: image: {{.Values.appimage}}:{{.Values.apptag}}
+        image: {{.Values.appimage}}:{{.Values.apptag}}
         resources:
           limits:
             cpu: 1
