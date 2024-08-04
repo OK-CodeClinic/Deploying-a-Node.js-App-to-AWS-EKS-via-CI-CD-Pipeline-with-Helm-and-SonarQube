@@ -5,8 +5,8 @@ on: workflow_dispatch
 
 env:
   AWS_REGION: us-west-2
-  ECR_REPOSITORY: weather_app
-  EKS_CLUSTER: weatherapp-eks
+  ECR_REPOSITORY: newsapp
+  EKS_CLUSTER: newsapp-eks
 
 jobs:
   Testing:
@@ -61,7 +61,7 @@ jobs:
         region: ${{ env.AWS_REGION }}
         tags: latest,${{ github.run_number }}
         daemon_off: false
-        dockerfile: weather-app/news-website/Dockerfile
+        dockerfile: news-app/news-website/Dockerfile
         context: ./
 
 
@@ -116,7 +116,7 @@ jobs:
                 aws-region: ${{ env.AWS_REGION }}
                 cluster-name: ${{ env.EKS_CLUSTER }}
                 #config-files: .github/values/dev.yaml
-                chart-path: weather-app/weather_app_charts
+                chart-path: news-app/newsapp_charts
                 namespace: default
                 values: appimage=${{ secrets.REGISTRY }}/${{ env.ECR_REPOSITORY }},apptag=${{ github.run_number }}
-                name: weather-app-stack 
+                name: newsapp-stack

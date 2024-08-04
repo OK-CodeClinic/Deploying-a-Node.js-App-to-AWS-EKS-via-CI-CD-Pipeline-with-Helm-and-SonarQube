@@ -1,0 +1,64 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: news-app-deployment
+spec:
+  replicas: 3
+  selector:
+    matchLabels:
+      app: news-app
+  template:
+    metadata:
+      labels:
+        app: news-app
+    spec:
+      containers:
+      - name: news-app-container
+        image: image: {{.Values.appimage}}:{{.Values.apptag}}
+        resources:
+          limits:
+            cpu: 1
+            memory: 1Gi
+          requests:
+            cpu: 500m
+            memory: 500Mi
+        ports:
+        - containerPort: 3000
+
+
+
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: news-app-service
+spec:
+  selector:
+    app: news-app
+  ports:
+    - name: http
+      protocol: TCP
+      port: 80
+      targetPort: 3000
+  type: LoadBalancer
+
+
+---
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: news-app-ingress
+  annotations:
+    nginx.ingress.kubernetes.io/rewrite-target: /
+spec:
+  rules:
+  - host: newsapp.okproject.site
+    http:
+      paths:
+      - path: /
+        pathType: Prefix
+        backend:
+          service:
+            name: news-app-service
+            port:
+              number: 80
