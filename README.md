@@ -51,7 +51,7 @@ cd Deploying-a-Node.js-App-to-AWS-EKS-via-CI-CD-Pipeline-with-Helm-and-SonarQube
 - Create a Sonarcloud token
 - Create a Sonarcloud orgainzation
 - Create a sonar cloud project
--
+
 
 
 ### Step 4:
@@ -83,12 +83,15 @@ Use ALB DNS name created by ingress to create a CNAME in the Route 53 Hosted Zon
 
 ### Step 9:
 Access your webapp usingh the cname record.
-``` news-app.okproject.site
+```
+news-app.okproject.site
 ```
 
 ### Step 10: Destroy
 - Delete the ingress controller
-``` kubectl delete -f https://raw.githubusercontent.com/kubernetes/ingress-nginx/controller-v1.1.3/deploy/static/provider/aws/deploy.yaml
+
+```
+kubectl delete -f https://raw.githubusercontent.com/kubernetes/ingress-nginx/controller-v1.1.3/deploy/static/provider/aws/deploy.yaml
 ```
 
 - Initialize terraform
@@ -97,7 +100,8 @@ terraform init -backend-config="bucket=newsapp-tf-state"  ## You  can specify yo
 ```
 
 - Destroy infrastruture
-``` terraform destroy
+```
+ terraform destroy
 ```
 
 ## Conclusion:
