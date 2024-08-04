@@ -108,4 +108,5 @@ terraform init -backend-config="bucket=newsapp-tf-state"  ## You  can specify yo
  This setup not only enhances the deployment speed and reliability but also maintains high code quality standards, making the application resilient and production-ready.
 
 
-## Author: Kehinde Omokungbe (kehindefrankli@gmail.com)
+## Author:
+Kehinde Omokungbe (kehindefrankli@gmail.com)
